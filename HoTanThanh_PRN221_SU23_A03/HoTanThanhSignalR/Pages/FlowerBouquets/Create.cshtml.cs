@@ -16,6 +16,8 @@ using Repository.CategoryRepo;
 using Repository.SupplierRepo;
 using HoTanThanhSignalR.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using SignalRAssignment_SE151098;
 
 namespace HoTanThanhSignalR.Pages.FlowerBouquets
 {
@@ -30,7 +32,12 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
         public IList<Category> Category { get; set; }
         public IList<Supplier> Supplier { get; set; }
 
-        public CreateModel() { }
+        private readonly IHubContext<SignalrServer> _signalRHub;
+
+        public CreateModel(IHubContext<SignalrServer> signalRHub)
+        {
+            _signalRHub = signalRHub;
+        }
 
         public IActionResult OnGet()
         {
@@ -41,7 +48,7 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             return Page();
         }
 
-        public IActionResult OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -74,6 +81,7 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             else
             {
                 repo.Save(flowerBouquet);
+                await _signalRHub.Clients.All.SendAsync("LoadFlower");
                 return RedirectToPage("./Index");
             }
         }

@@ -12,6 +12,8 @@ using System.Text.Json;
 using Repository.FlowerBouquetRepo;
 using HoTanThanhSignalR.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using SignalRAssignment_SE151098;
 
 namespace HoTanThanhSignalR.Pages.FlowerBouquets
 {
@@ -20,12 +22,17 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
     {
         private readonly IFlowerRepo repo = new FlowerRepo();
         public FlowerBouquet FlowerBouquet { get; set; }
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-        public DetailsModel() { }
+        public DetailsModel(IHubContext<SignalrServer> signalRHub)
+        {
+            _signalRHub = signalRHub;
+        }
 
-        public IActionResult OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             FlowerBouquet = repo.GetFlower(id);
+            await _signalRHub.Clients.All.SendAsync("LoadFlower");
             if (FlowerBouquet == null)
             {
                 return NotFound();

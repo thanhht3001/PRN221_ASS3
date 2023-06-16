@@ -12,6 +12,8 @@ using System.Text.Json;
 using Repository.FlowerBouquetRepo;
 using HoTanThanhSignalR.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using SignalRAssignment_SE151098;
 
 namespace HoTanThanhSignalR.Pages.FlowerBouquets
 {
@@ -23,11 +25,17 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
         [BindProperty]
         public FlowerBouquet FlowerBouquet { get; set; }
 
-        public DeleteModel() { }
+        private readonly IHubContext<SignalrServer> _signalRHub;
+
+        public DeleteModel(IHubContext<SignalrServer> signalRHub)
+        {
+            _signalRHub = signalRHub;
+        }
 
         public IActionResult OnGetAsync(int id)
         {
             FlowerBouquet = repo.GetFlower(id);
+            await _signalRHub.Clients.All.SendAsync("LoadFlower");
             if (FlowerBouquet == null)
             {
                 return NotFound();
@@ -35,15 +43,17 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             return Page();
         }
 
-        public IActionResult OnPostAsync(int id)
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (id <= 0)
             {
                 return NotFound();
-            } else
+            }
+            else
             {
                 FlowerBouquet = repo.GetFlower(id);
                 repo.Delete(FlowerBouquet);
+                await _signalRHub.Clients.All.SendAsync("LoadFlower");
                 return RedirectToPage("./Index");
             }
         }

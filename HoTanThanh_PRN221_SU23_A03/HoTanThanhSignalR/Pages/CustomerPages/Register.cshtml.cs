@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Repository.CustomerRepo;
 using Microsoft.AspNetCore.SignalR;
+using SignalRAssignment_SE151098;
 
 namespace HoTanThanhSignalR.Pages.CustomerPages
 {
@@ -18,9 +19,13 @@ namespace HoTanThanhSignalR.Pages.CustomerPages
         public CustomerViewModel Customer { get; set; }
 
         private readonly ICustomerRepo repo = new CustomerRepo();
+        private readonly IHubContext<SignalrServer> _signalRHub;
 
-        public RegisterModel() { }
-        
+        public RegisterModel(IHubContext<SignalrServer> signalRHub)
+        {
+            _signalRHub = signalRHub;
+        }
+
 
         public IActionResult OnGet()
         {
@@ -51,6 +56,7 @@ namespace HoTanThanhSignalR.Pages.CustomerPages
             else
             {
                 repo.Save(customer);
+                await _signalRHub.Clients.All.SendAsync("LoadAppUsers");
                 return RedirectToPage("/Index");
             }
 

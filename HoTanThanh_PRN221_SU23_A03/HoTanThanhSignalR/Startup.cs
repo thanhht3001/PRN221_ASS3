@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SignalRAssignment_SE151098;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +36,8 @@ namespace HoTanThanhSignalR
             options.LoginPath = "/";
             options.AccessDeniedPath = "/access-denied";
         });
+
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +68,12 @@ namespace HoTanThanhSignalR
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+            });
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapRazorPages();
+                endpoints.MapHub<SignalrServer>("/signalrServer");
             });
         }
     }

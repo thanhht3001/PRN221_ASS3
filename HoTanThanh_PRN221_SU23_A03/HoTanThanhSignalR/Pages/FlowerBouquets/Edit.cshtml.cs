@@ -17,6 +17,8 @@ using Repository.CategoryRepo;
 using Repository.SupplierRepo;
 using HoTanThanhSignalR.Utils;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
+using SignalRAssignment_SE151098;
 
 namespace HoTanThanhSignalR.Pages.FlowerBouquets
 {
@@ -33,7 +35,13 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
         [BindProperty]
         public FlowerBouquetViewModel FlowerBouquet { get; set; }
 
-        public EditModel() { }
+        private readonly IHubContext<SignalrServer> _signalRHub;
+
+
+        public EditModel(IHubContext<SignalrServer> signalRHub)
+        {
+            _signalRHub = signalRHub;
+        }
 
         public IActionResult OnGetAsync(int id)
         {
@@ -62,7 +70,7 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             return Page();
         }
 
-        public IActionResult OnPostAsync()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
@@ -85,8 +93,10 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
                 if (FlowerBouquet != null)
                 {
                     repo.Update(flowerBouquet);
+                    await _signalRHub.Clients.All.SendAsync("LoadFlower");
                     return RedirectToPage("./Index");
-                } else
+                }
+                else
                 {
                     return Page();
                 }

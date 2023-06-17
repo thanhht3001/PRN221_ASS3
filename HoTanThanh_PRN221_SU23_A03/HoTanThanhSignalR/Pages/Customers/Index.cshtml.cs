@@ -37,5 +37,11 @@ namespace HoTanThanhSignalR.Pages.Customers
             Customer = repo.SearchByName(SearchString);
             return Page();
         }
+
+        public IActionResult OnGetCustomers()
+        {
+            var customers = repo.GetCustomers();
+            return new JsonResult(customers);
+        }
     }
 }

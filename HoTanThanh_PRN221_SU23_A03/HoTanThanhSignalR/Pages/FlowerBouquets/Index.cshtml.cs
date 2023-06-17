@@ -46,5 +46,11 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             await _signalRHub.Clients.All.SendAsync("LoadFlowers");
             return Page();
         }
+
+        public IActionResult OnGetFlowers()
+        {
+            var bouquets = repo.GetFlowers();
+            return new JsonResult(bouquets);
+        }
     }
 }

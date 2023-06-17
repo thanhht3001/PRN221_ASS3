@@ -32,7 +32,7 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
             _signalRHub = signalRHub;
         }
 
-        public IActionResult OnGetAsync(int id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
             FlowerBouquet = repo.GetFlower(id);
             await _signalRHub.Clients.All.SendAsync("LoadFlower");

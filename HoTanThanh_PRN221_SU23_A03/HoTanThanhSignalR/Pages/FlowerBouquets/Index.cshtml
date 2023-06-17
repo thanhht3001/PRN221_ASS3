@@ -50,8 +50,8 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
-@foreach (var item in Model.FlowerBouquet) {
+    <tbody id="tableBody1"></tbody>
+@*@foreach (var item in Model.FlowerBouquet) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.FlowerBouquetName)
@@ -80,6 +80,5 @@
                 <a asp-page="./Delete" asp-route-id="@item.FlowerBouquetId">Delete</a>
             </td>
         </tr>
-}
-    </tbody>
+}*@
 </table>

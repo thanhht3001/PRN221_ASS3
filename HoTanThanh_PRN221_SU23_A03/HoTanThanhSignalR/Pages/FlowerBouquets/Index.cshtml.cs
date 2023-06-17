@@ -36,14 +36,14 @@ namespace HoTanThanhSignalR.Pages.FlowerBouquets
         public async Task<IActionResult> OnGetAsync()
         {
             FlowerBouquet = repo.GetFlowers();
-            await _signalRHub.Clients.All.SendAsync("LoadFlower");
+            await _signalRHub.Clients.All.SendAsync("LoadFlowers");
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
             FlowerBouquet = repo.SearchByName(SearchString);
-            await _signalRHub.Clients.All.SendAsync("LoadFlower");
+            await _signalRHub.Clients.All.SendAsync("LoadFlowers");
             return Page();
         }
     }

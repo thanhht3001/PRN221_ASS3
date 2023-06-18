@@ -22,21 +22,21 @@ $(() => {
     function LoadAppUserData() {
         var tr = '';
         $.ajax({
-            url: '/Customers',
+            url: '/Customers/Index?handler=Customers',
             method: 'GET',
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr += `<tr>
-                        <td> ${v.Email} </td>
-                        <td> ${v.CustomerName} </td>
-                        <td> ${v.City} </td>
-                        <td> ${v.Country} </td>
-                        <td> ${v.Password} </td>
-                        <td> ${v.Birthday} </td>
+                        <td> ${v.email} </td>
+                        <td> ${v.customerName} </td>
+                        <td> ${v.city} </td>
+                        <td> ${v.country} </td>
+                        <td> ${v.password} </td>
+                        <td> ${v.birthday} </td>
                         <td>
-                 <a asp-page="./Edit" asp-route-id="@item.CustomerId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.CustomerId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.CustomerId">Delete</a>
+                <a href='/Customers/Edit?id=${v.customerId}'>Edit</a> |
+                <a href='/Customers/Details?id=${v.customerId}'>Details</a> |
+                <a href='/Customers/Delete?id=${v.customerId}'>Delete</a>
                 </td> </tr>`
                 })
                 $("#tableBody").html(tr);
@@ -49,22 +49,22 @@ $(() => {
     function LoadFlowers() {
         var tr = '';
         $.ajax({
-            url: '/FlowerBouquets',
+            url: '/FlowerBouquets/Index?handler=Flowers',
             method: 'GET',
             success: (result) => {
                 $.each(result, (k, v) => {
                     tr += `<tr>
-                        <td> ${v.FlowerBouquetName} </td>
-                        <td> ${v.Description} </td>
-                        <td> ${v.UnitPrice} </td>
-                        <td> ${v.UnitsInStock} </td>
-                        <td> ${v.FlowerBouquetStatus} </td>
-                        <td> ${v.Category.CategoryName} </td>
-                        <td> ${v.Supplier.SupplierName} </td>
+                        <td> ${v.flowerBouquetName} </td>
+                        <td> ${v.description} </td>
+                        <td> ${v.unitPrice} </td>
+                        <td> ${v.unitsInStock} </td>
+                        <td> ${v.flowerBouquetStatus} </td>
+                        <td> ${v.category.categoryName} </td>
+                        <td> ${v.supplier.supplierName} </td>
                         <td>
-                <a asp-page="./Edit" asp-route-id="@item.FlowerBouquetId">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.FlowerBouquetId">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.FlowerBouquetId">Delete</a>
+                <a href='/FlowerBouquets/Edit?id=${v.flowerBouquetId}'>Edit</a> |
+                <a href='/FlowerBouquets/Details?id=${v.flowerBouquetId}'>Details</a> |
+                <a href='/FlowerBouquets/Delete?id=${v.flowerBouquetId}'>Delete</a>
                 </td> </tr>`
                 })
                 $("#tableBody1").html(tr);
